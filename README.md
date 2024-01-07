@@ -30,8 +30,8 @@ Pembagian tugas dalam pengembangan aplikasi Confessify telah dilakukan sebagai b
    - Menangani tampilan splashscreen agar memberikan kesan awal yang menarik kepada pengguna.
    - Menangani proses login dengan authentikasi firebase.
    - Menangani proses registrasi (signup) dengan authentikasi firebase.
-   - Mengelola tampilan halaman utama (home) yang memuat confessions 
--bertanggungjawab pada fitur menghapus confessions.
+   - Mengelola tampilan halaman utama (home) yang memuat confessions
+   - bertanggungjawab pada fitur menghapus confessions.
 
 2. *Bagas Saras Budi Prastika _20210140092:*
    - Menangani fitur create confess, memungkinkan pengguna untuk membuat confessions dengan mengisi kolom teks dan mengunggahnya ke aplikasi.
