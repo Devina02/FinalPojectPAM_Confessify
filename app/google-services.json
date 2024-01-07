@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026916451347",
+    "project_id": "finalprojectpam-confessify",
+    "storage_bucket": "finalprojectpam-confessify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026916451347:android:5bbd4935eefeed9ddcabe6",
+        "android_client_info": {
+          "package_name": "com.example.finalprojectpam_confessify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpq8Ukf4an8xKHK7lbtNvgbPYfr7TxRDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
