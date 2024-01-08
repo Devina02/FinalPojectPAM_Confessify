@@ -1,6 +1,7 @@
 package com.example.finalprojectpam_confessify.ui.login
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -138,7 +136,7 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         // buat manggil fungsi login
-                        loginUser(email, password, context)
+                        loginUser(email, password, navController, context)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -170,7 +168,7 @@ fun LoginScreen(
 }
 
 // Fungsi untuk melakukan login pengguna
-private fun loginUser(email: String, password: String, context: Context) {
+private fun loginUser(email: String, password: String, navController: NavHostController,context: Context) {
     // Mendapatkan instance Firebase Authentication
     val auth = FirebaseAuth.getInstance()
 
@@ -178,9 +176,9 @@ private fun loginUser(email: String, password: String, context: Context) {
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // ini buat nampilin pesan kalo login berhasil
                 showToast(context, "Login berhasil!")
-                // Navigate to the main screen or perform other actions upon successful login
+                // Navigasi ke layar "Home"
+                navController.navigate("Home")
             } else {
                 val exception = task.exception as? FirebaseAuthException
                 // ini buat nampilin pesan kalo login gagal
@@ -188,5 +186,3 @@ private fun loginUser(email: String, password: String, context: Context) {
             }
         }
 }
-
-
