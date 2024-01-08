@@ -24,8 +24,15 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
+    LaunchedEffect(key1 = true) {
+
+        delay(3000)
+        navController.navigate("Login")
+
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -59,11 +66,6 @@ fun SplashScreen(
                 fontSize = 30.sp,
                 color = Color.Black
             )
-        }
-        LaunchedEffect(key1 = true) {
-            // Delay for 5 seconds (5000 milliseconds) before navigating
-            delay(5000)
-
         }
     }
 

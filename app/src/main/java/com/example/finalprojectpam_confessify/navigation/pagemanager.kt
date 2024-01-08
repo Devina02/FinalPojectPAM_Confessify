@@ -12,7 +12,7 @@ import com.example.finalprojectpam_confessify.ui.signup.SignUpScreen
 @Composable
 fun Nav(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = "SignUp" ){
+    NavHost(navController = navController, startDestination = "SplashScreen" ){
         composable("SplashScreen"){
             SplashScreen(navController)
         }
