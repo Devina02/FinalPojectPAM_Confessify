@@ -12,14 +12,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,8 +77,8 @@ fun LoginScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .padding(15.dp)
+                .clip(MaterialTheme.shapes.medium).width(500.dp)
+                .padding(30.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -152,15 +157,12 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Button(onClick = {
-                    navController.navigate("SignUp")
-                }) {
+                TextButton(onClick = { navController.navigate("SignUp")}){
                     Text(
                         text = "SignUp",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                    )
+                        color = Color.Black
+                        )
                 }
             }
         }

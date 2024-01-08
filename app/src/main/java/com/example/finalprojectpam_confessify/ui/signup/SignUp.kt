@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -187,14 +188,11 @@ fun SignUpScreen(
                 // ngasih jarak kebawah
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Button(onClick = {
-                    navController.navigate("Login")
-                }) {
+                TextButton(onClick = { navController.navigate("Login")}){
                     Text(
                         text = "Login",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = Color.Black
                     )
                 }
 
