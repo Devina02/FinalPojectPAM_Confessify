@@ -1,6 +1,7 @@
-package com.example.finalprojectpam_confessify
+package com.example.finalprojectpam_confessify.ui.signup
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,35 +31,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.finalprojectpam_confessify.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.UserProfileChangeRequest
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen() {
-    // buat nyimpen email dan password yang diinput oleh pengguna
+fun SignUpScreen(
+    navController: NavHostController
+) {
+    //buat nyimpen nilai input dari user
+    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     // Mendapatkan referensi ke Context lokal
     val context = LocalContext.current
 
+    // Box buat layout utama
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
+        // Image buat nampilin background
         Image(
             painter = painterResource(id = R.drawable.img),
             contentDescription = null,
@@ -64,27 +77,49 @@ fun LoginScreen() {
 
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .padding(15.dp)
+                .width(500.dp)
+                .padding(30.dp)
         ) {
+            // Column buat menyusun si kayak texfield gitu
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Judul
                 Text(
-                    text = "Login",
+                    text = "Sign Up",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.height(40.dp))
+                // ngasih jarak kebawah
+                Spacer(modifier = Modifier.height(20.dp))
 
+                // buat input username
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    label = { Text("Username") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Face,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                )
+
+                // ngasih jarak kebawah
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // buat inpputin email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -94,15 +129,17 @@ fun LoginScreen() {
                     label = { Text("Email") },
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_email_24),
+                            imageVector = Icons.Default.Email,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
                     }
                 )
 
+                // ngasih jarak kebawah
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Input untuk password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -111,74 +148,94 @@ fun LoginScreen() {
                         .height(60.dp),
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_lock_24),
+                            imageVector = Icons.Default.Lock,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
                     }
                 )
 
+                // ngasih jarak kebawah
                 Spacer(modifier = Modifier.height(30.dp))
 
+                // Tombol Daftar
                 Button(
                     onClick = {
-                        // buat manggil fungsi login
-                        loginUser(email, password, context)
+                        // ini buat manggil fungsi registrasi
+                        registerUser(email, username, password)
+                        // ini buat nampilin notif kalo udh berhasil regis
+                        showToast(context, "Registrasi berhasil!")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                ){
-                    Text("Login", fontSize = 18.sp)
+                ) {
+                    Text("Daftar", fontSize = 18.sp)
                 }
 
+                // ngasih jarak kebawah
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "Belum punya akun?",
+                    text = "Sudah punya akun?",
                     fontSize = 18.sp,
                     color = Color.Black
                 )
 
+                // ngasih jarak kebawah
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Text(
-                    text = "SignUp",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                )
+                Button(onClick = {
+                    navController.navigate("Login")
+                }) {
+                    Text(
+                        text = "Login",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                    )
+                }
+
             }
         }
     }
 }
 
-// Fungsi untuk melakukan login pengguna
-private fun loginUser(email: String, password: String, context: Context) {
-    // Mendapatkan instance Firebase Authentication
+// Fungsi untuk menangani registrasi pengguna
+private fun registerUser(email: String, username: String, password: String) {
     val auth = FirebaseAuth.getInstance()
 
-    // Melakukan login dengan email dan password menggunakan Firebase Authentication
-    auth.signInWithEmailAndPassword(email, password)
+    // Buat pengguna baru dengan email dan password
+    auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // ini buat nampilin pesan kalo login berhasil
-                showToast(context, "Login berhasil!")
-                // Navigate to the main screen or perform other actions upon successful login
+                // Registrasi berhasil
+                val user = auth.currentUser
+
+                // Perbarui profil pengguna dengan nama yang diberikan
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(username)
+                    .build()
+
+                user?.updateProfile(profileUpdates)
+                    ?.addOnCompleteListener { profileUpdateTask ->
+                        if (profileUpdateTask.isSuccessful) {
+                            // jika profil berhasil
+                        } else {
+                            // Tangani kegagalan pembaruan profil
+                        }
+                    }
             } else {
+                // kalo signup gagal
                 val exception = task.exception as? FirebaseAuthException
-                // ini buat nampilin pesan kalo login gagal
-                showToast(context, "Login gagal. ${exception?.message}")
+                // Tangani kegagalan registrasi, tampilkan pesan kesalahan, dll.
             }
         }
 }
 
-
-@Composable
-@Preview(showBackground = true)
-fun LoginScreenPreview() {
-    LoginScreen()
+// Fungsi untuk menampilkan Toast
+fun showToast(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

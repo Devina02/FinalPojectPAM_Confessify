@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.finalprojectpam_confessify.navigation.Nav
+import com.example.finalprojectpam_confessify.ui.login.LoginScreen
 import com.example.finalprojectpam_confessify.ui.theme.FinalProjectPAM_ConfessifyTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,12 +21,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             FinalProjectPAM_ConfessifyTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                   LoginScreen()
-                }
+                val navController = rememberNavController()
+                Nav(navController)
             }
         }
     }

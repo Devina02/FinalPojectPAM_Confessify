@@ -9,18 +9,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
+
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navController: NavHostController
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -55,11 +60,11 @@ fun SplashScreen() {
                 color = Color.Black
             )
         }
-    }
-}
+        LaunchedEffect(key1 = true) {
+            // Delay for 5 seconds (5000 milliseconds) before navigating
+            delay(5000)
 
-@Composable
-@Preview
-fun SplashScreenView(){
-    SplashScreen()
+        }
+    }
+
 }
