@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.finalprojectpam_confessify.SplashScreen
+import com.example.finalprojectpam_confessify.ui.Home.HomeScreen
 import com.example.finalprojectpam_confessify.ui.login.LoginScreen
 import com.example.finalprojectpam_confessify.ui.signup.SignUpScreen
 
@@ -21,6 +22,9 @@ fun Nav(navController: NavHostController) {
         }
         composable("Login"){
             LoginScreen(navController)
+        }
+        composable("Home"){
+            HomeScreen(navController)
         }
 
     }

@@ -1,18 +1,14 @@
 package com.example.finalprojectpam_confessify.ui.Home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Face
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,13 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.finalprojectpam_confessify.R
+import androidx.navigation.NavHostController
 
 data class NavItemState(
     val title: String,
@@ -37,7 +30,9 @@ data class NavItemState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier) {
     var bottomNavState by rememberSaveable {
         mutableStateOf(0)
     }
@@ -69,7 +64,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         Text(
                             text = "Tersembunyi dalam suara, terungkap di Confesisfy!",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
+                            fontSize = 14.sp
                             )
                     }
 
@@ -125,11 +120,4 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             )
         }
     }
-}
-
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
 }
