@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FinalProjectPAM_Confessify</string>
+    <string name="post">Confess</string>
 </resources>
