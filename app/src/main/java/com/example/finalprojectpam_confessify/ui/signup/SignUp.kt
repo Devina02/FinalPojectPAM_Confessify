@@ -165,7 +165,7 @@ fun SignUpScreen(
                 Button(
                     onClick = {
                         // ini buat manggil fungsi registrasi
-                        registerUser(email, username, password)
+                        registerUser(email, username, password, navController)
                         // ini buat nampilin notif kalo udh berhasil regis
                         showToast(context, "Registrasi berhasil!")
                     },
@@ -202,17 +202,14 @@ fun SignUpScreen(
 }
 
 // Fungsi untuk menangani registrasi pengguna
-private fun registerUser(email: String, username: String, password: String) {
+private fun registerUser(email: String, username: String, password: String, navController: NavHostController) {
     val auth = FirebaseAuth.getInstance()
 
-    // Buat pengguna baru dengan email dan password
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Registrasi berhasil
                 val user = auth.currentUser
 
-                // Perbarui profil pengguna dengan nama yang diberikan
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(username)
                     .build()
@@ -220,18 +217,16 @@ private fun registerUser(email: String, username: String, password: String) {
                 user?.updateProfile(profileUpdates)
                     ?.addOnCompleteListener { profileUpdateTask ->
                         if (profileUpdateTask.isSuccessful) {
-                            // jika profil berhasil
+                            // If profile update is successful, navigate to AkunProfil
+                            //navController.navigate("AkunProfil/$username/$email")
                         } else {
-                            // Tangani kegagalan pembaruan profil
+                            // Handle failure to update profile
                         }
                     }
-            } else {
-                // kalo signup gagal
-                val exception = task.exception as? FirebaseAuthException
-                // Tangani kegagalan registrasi, tampilkan pesan kesalahan, dll.
             }
         }
 }
+
 
 // Fungsi untuk menampilkan Toast
 fun showToast(context: Context, message: String) {

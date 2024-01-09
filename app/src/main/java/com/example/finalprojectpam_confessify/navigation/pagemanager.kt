@@ -5,7 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.finalprojectpam_confessify.SplashScreen
+import com.example.finalprojectpam_confessify.ui.Create.CreateScreen
 import com.example.finalprojectpam_confessify.ui.Home.HomeScreen
+import com.example.finalprojectpam_confessify.ui.akunprofil.AkunProfil
 import com.example.finalprojectpam_confessify.ui.login.LoginScreen
 import com.example.finalprojectpam_confessify.ui.signup.SignUpScreen
 
@@ -26,6 +28,13 @@ fun Nav(navController: NavHostController) {
         composable("Home"){
             HomeScreen(navController)
         }
+        composable("AkunProfil"){
+            AkunProfil(navController)
+        }
+        composable("Create"){
+            CreateScreen(navController)
+        }
 
     }
 }
+

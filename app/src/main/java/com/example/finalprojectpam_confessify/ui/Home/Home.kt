@@ -1,12 +1,12 @@
+
 package com.example.finalprojectpam_confessify.ui.Home
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,12 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-// Data class yang merepresentasikan state setiap item di bottom navigation bar.
-data class NavItemState(
-    val title: String,             // Judul item navigasi
-    val selectedIcon: ImageVector, // Ikon saat item terpilih
-    val unselectedIcon: ImageVector // Ikon saat item tidak terpilih
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,34 +38,9 @@ fun HomeScreen(
     navController: NavHostController,  // Digunakan untuk mengontrol navigasi antar layar
     modifier: Modifier = Modifier      // Mengubah tata letak atau gaya tampilan
 ) {
-    // Mutable state untuk menyimpan indeks item navigasi terpilih pada bottom navigation.
-    var bottomNavState by rememberSaveable {
-        mutableStateOf(0)
-    }
 
-    // Daftar item di bottom navigation bar.
-    val items = listOf(
-        NavItemState(
-            title = "Create",
-            selectedIcon = Icons.Filled.Add,
-            unselectedIcon = Icons.Outlined.Add
-        ),
-        NavItemState(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
-        ),
-        NavItemState(
-            title = "Account",
-            selectedIcon = Icons.Filled.Face,
-            unselectedIcon = Icons.Outlined.Face
-        )
-    )
-
-    // Scaffold merupakan struktur dasar dari layar yang memiliki top bar, bottom bar, dan content.
     Scaffold(
         topBar = {
-            // untuk nampilin judul aplikasi.
             TopAppBar(
                 title = {
                     // Box untuk nagtur si tata letak isi dari top app bar.
@@ -93,62 +62,74 @@ fun HomeScreen(
                 )
             )
         },
-        bottomBar = {
-            // NavigationBar untuk nampilin bottom navigation bar.
-            NavigationBar(
+        content = { contentPadding ->
+            Column(
                 modifier = modifier
-                    .padding(10.dp)
-                    .clip(RoundedCornerShape(20.dp)),
-                containerColor = Color(0xFF8692F7)
+                    .padding(contentPadding)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                // Membuat setiap item di bottom navigation bar.
-                items.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        selected = bottomNavState == index,
-                        onClick = { bottomNavState = index },
-                        icon = {
-                            // ini buat bikin icon sesuai dengan icon yang terpilih atau tidak terpilih.
-                            Icon(
-                                imageVector = if (bottomNavState == index) item.selectedIcon
-                                else item.unselectedIcon,
-                                contentDescription = item.title
-                            )
-                        },
-                        label = { Text(text = item.title) },
-                        // Menentukan warna untuk item terpilih.
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color(0xFF552A27),
-                            selectedTextColor = Color(0xFF63332F),
-                            indicatorColor = Color(0xFF673AB7)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Button(
+                        onClick = {
+                            // Handle button click for "Create"
+                            println("Navigating to Create")
+                            navController.navigate("Create")
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Create"
                         )
-                    )
-                }
-            }
-        }
-    ) { contentPadding ->
-        // Column buat content pada layar.
-        Column(
-            modifier = modifier
-                .padding(contentPadding)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            // LazyColumn untuk menampilkan daftar Confession yang dapat di-scroll.
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(vertical = 4.dp)
-            ) {
-                items(count = 500) {
-                    // Menampilkan isi dengan Confession sesuai indeks.
-                    Isi (Confess = "Confession: $it")
-                }
-            }
-        }
-    }
-}
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Create")
+                    }
 
+                    Button(
+                        onClick = {
+                            // Handle button click for "Home"
+                            navController.navigate("Home")
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = "Home"
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Home")
+                    }
+
+                    Button(
+                        onClick = { navController.navigate("AkunProfil")}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Face,
+                            contentDescription = "Profile"
+                        )
+                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Profile")
+                    }
+                }
+
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(vertical = 4.dp)
+                ) {
+                    items(count = 500) {
+                        Isi(Confess = "Confession: $it")
+                    }
+                }
+            }
+        }
+    )
+}
 @Composable
 private fun Isi (Confess: String) {
     // Mutable state untuk menyimpan status "expanded" dari isi.
