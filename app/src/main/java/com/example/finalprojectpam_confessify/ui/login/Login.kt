@@ -71,7 +71,6 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-
         Card(
             modifier = Modifier
                 .fillMaxWidth()
