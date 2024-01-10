@@ -48,10 +48,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.R
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun CreateScreen(navController: NavHostController) {
+
     var confessText by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
@@ -123,9 +126,27 @@ fun CreateScreen(navController: NavHostController) {
 
                     // Button "Edit Username"
                     Button(
-                        onClick = { /*TODO*/ }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
+                        onClick = {
+                            // Get an instance of Firestore
+                            val firestore = Firebase.firestore
+
+                            // Create a data object to be saved
+                            val confessData = hashMapOf(
+                                "confessText" to confessText,
+                                // You can add more fields if needed
+                            )
+
+                            // Add a new document with a generated ID
+                            firestore.collection("confessions")
+                                .add(confessData)
+                                .addOnSuccessListener { documentReference ->
+                                    println("DocumentSnapshot added with ID: ${documentReference.id}")
+                                }
+                                .addOnFailureListener { e ->
+                                    println("Error adding document: $e")
+                                }
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(8.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Send,
@@ -135,22 +156,6 @@ fun CreateScreen(navController: NavHostController) {
                         )
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                         Text(text = "Upload")
-                    }
-
-                    // Button "LogOut Akun"
-                    Button(
-                        onClick = { }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "",
-                            tint = Color.White,
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Delete")
                     }
                 }
             }
@@ -203,7 +208,6 @@ fun CreateScreen(navController: NavHostController) {
         }
     }
 }
-
 
 @Composable
 @Preview

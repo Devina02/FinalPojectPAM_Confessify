@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
@@ -124,7 +126,7 @@ fun HomeScreen(
     )
 }
 @Composable
-private fun Isi (Confess: String) {
+private fun Isi(Confess: String) {
     // Mutable state untuk menyimpan status "expanded" dari isi.
     var expanded by remember { mutableStateOf(false) }
 
@@ -143,12 +145,15 @@ private fun Isi (Confess: String) {
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
-            .fillMaxWidth() // Memastikan lebar penuh
+            .fillMaxWidth()
     ) {
-        // Row untuk menampilkan teks Confession dan tombol "Show more/less".
+        // RowScope untuk menampilkan teks Confession, tombol "Show more/less", tombol "Edit", dan tombol "Delete".
         Row(
-            modifier = Modifier.padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Column untuk menampilkan teks Confession.
             Column(
@@ -159,15 +164,36 @@ private fun Isi (Confess: String) {
                 Text(text = "Confess: ")
                 Text(text = Confess)
             }
-            // Tombol untuk mengganti status "expanded".
-            ElevatedButton(
-                onClick = { expanded = !expanded }
+
+            // Row untuk menampung tombol "Show more/less", "Edit", dan "Delete".
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(if (expanded) "Show less" else "Show more")
+                // Tombol untuk mengganti status "expanded".
+                ElevatedButton(
+                    onClick = { expanded = !expanded }
+                ) {
+                    Text(if (expanded) "Show less" else "Show more")
+                }
+
+                // Tombol "Delete".
+                IconButton(
+                    onClick = {
+
+                        println("Delete clicked for confession: $Confess")
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
             }
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

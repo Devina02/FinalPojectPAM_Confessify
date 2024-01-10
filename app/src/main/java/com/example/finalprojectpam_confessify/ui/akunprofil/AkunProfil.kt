@@ -42,7 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.R
 
 @Composable
-fun AkunProfil(navController: NavHostController) {
+fun AkunProfilScreen(navController: NavHostController) {
     val username = navController.previousBackStackEntry?.arguments?.getString("username") ?: ""
     val email = navController.previousBackStackEntry?.arguments?.getString("email") ?: ""
 
@@ -182,5 +182,5 @@ fun AkunProfil(navController: NavHostController) {
 @Preview
 fun AkunProfilPreview() {
     val navController = rememberNavController()
-    AkunProfil(navController = navController)
+    AkunProfilScreen(navController = navController)
 }
