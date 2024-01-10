@@ -1,34 +1,35 @@
-package com.example.finalprojectpam_confessify.ui.Home
+package com.example.finalprojectpam_confessify.ui.Create
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.finalprojectpam_confessify.data.ConfessData
-import com.example.finalprojectpam_confessify.repository.ConfessRepository
-import kotlinx.coroutines.launch
+import com.example.finalprojectpam_confessify.repository.RepositoryConfess
 
-class InsertViewModel(private val confessRepository: ConfessRepository) : ViewModel() {
+class InsertViewModel(private val repositoryConfess: RepositoryConfess) : ViewModel() {
     var insertConfessState by mutableStateOf(InsertUiState())
         private set
-    fun updateInsertKontakState(insertUiEvent: InsertUiEvent) {
+
+    fun validasiInput(uiState: InsertUiEvent = insertConfessState.insertUiEvent): Boolean {
+        return with(uiState) {
+            fess.isNotBlank()
+        }
+    }
+    fun updateInsertState(insertUiEvent: InsertUiEvent) {
         insertConfessState = InsertUiState(insertUiEvent = insertUiEvent)
     }
 
-    suspend fun insertConfess() {
-        viewModelScope.launch {
-            try {
-                confessRepository.insertConfess(insertConfessState.insertUiEvent.toConfessData())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+    suspend fun saveConfess() {
+        if (validasiInput()) {
+            repositoryConfess.insertConfess(insertConfessState.insertUiEvent.toConfessData())
         }
     }
 }
 
 data class InsertUiState(
     val insertUiEvent: InsertUiEvent = InsertUiEvent(),
+    val isEntryValid: Boolean = false
 )
 
 data class InsertUiEvent(
