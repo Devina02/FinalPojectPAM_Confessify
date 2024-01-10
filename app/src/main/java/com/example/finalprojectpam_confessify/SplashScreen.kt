@@ -61,9 +61,15 @@ fun SplashScreen(
             )
 
             Text(
-                text = "CONFESSIFY",
+                text = "Tersembunyi Dalam Suara",
                 fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
+                fontSize = 20.sp,
+                color = Color.Black
+            )
+            Text(
+                text = "Terungkap Di Confessify!",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
                 color = Color.Black
             )
         }
