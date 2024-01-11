@@ -1,5 +1,6 @@
 package com.example.finalprojectpam_confessify.ui.Create
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,6 +57,7 @@ import com.google.firebase.firestore.firestore
 fun CreateScreen(navController: NavHostController) {
 
     var confessText by remember { mutableStateOf("") }
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -130,6 +133,9 @@ fun CreateScreen(navController: NavHostController) {
                                 .add(confessData)
                                 .addOnSuccessListener { documentReference ->
                                     println("DocumentSnapshot added with ID: ${documentReference.id}")
+
+                                    // Show success toast
+                                    Toast.makeText(context, "Confess Upload", Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener { e ->
                                     println("Error adding document: $e")
