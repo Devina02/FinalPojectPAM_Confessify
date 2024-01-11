@@ -1,5 +1,6 @@
 package com.example.finalprojectpam_confessify.ui.Home
 
+import android.widget.Toast
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -10,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -127,7 +130,7 @@ fun HomeScreen(
                 ) {
                     items(confessions) { confession ->
                         Isi(
-                            Confess = "Confession: $confession",
+                            Confess = "$confession",
                             onDeleteClick = {
                                 deleteConfession(confession, firestore)
                             }
@@ -142,6 +145,8 @@ fun HomeScreen(
 @Composable
 private fun Isi(Confess: String, onDeleteClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     val extraPadding by animateDpAsState(
         if (expanded) 48.dp else 0.dp,
@@ -170,7 +175,7 @@ private fun Isi(Confess: String, onDeleteClick: () -> Unit) {
                     .weight(1f)
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
-                Text(text = "Confess: ")
+                Text(text = "Confession: ")
                 Text(text = Confess)
             }
 
@@ -188,6 +193,8 @@ private fun Isi(Confess: String, onDeleteClick: () -> Unit) {
                 IconButton(
                     onClick = {
                         onDeleteClick.invoke()
+                        // Show success toast
+                        Toast.makeText(context, "Berhasil delete, silahkan refresh halaman", Toast.LENGTH_SHORT).show()
                     }
                 ) {
                     Icon(
@@ -210,6 +217,5 @@ private fun deleteConfession(confession: String, firestore: FirebaseFirestore) {
             }
         }
         .addOnFailureListener { e ->
-            println("Error deleting document: $e")
         }
 }

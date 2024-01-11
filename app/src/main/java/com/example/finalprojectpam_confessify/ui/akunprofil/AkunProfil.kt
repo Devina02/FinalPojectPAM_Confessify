@@ -106,11 +106,11 @@ fun AkunProfilScreen(navController: NavHostController) {
                     Button(
                         onClick = {
                             println("Navigating to EditUsername")
-                            navController.navigate("EditUsername")
+                            navController.navigate("UpdateProfil")
                                   },
                         modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)) {
+                            .fillMaxWidth()
+                            .padding(8.dp)) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "null",
@@ -208,140 +208,5 @@ fun UserProfile(username: String?, email: String?) {
             modifier = Modifier.padding(10.dp),
             color = Color.Black
         )
-    }
-}
-
-@Composable
-fun EditUsernameScreen(navController: NavHostController) {
-    var newUsername by remember { mutableStateOf("") }
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        // Your background image or content goes here
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            OutlinedTextField(
-                value = newUsername,
-                onValueChange = { value -> newUsername = value },
-                label = { Text("New Username") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    // Handle button click to save new username
-                    if (newUsername.isNotEmpty()) {
-                        // Call your function to update the username in Firebase
-                        updateUsername(newUsername)
-                        // Navigate back to the profile screen
-                        navController.popBackStack()
-                    } else {
-                        // Handle case where the new username is empty
-                        // You can show a toast or error message
-                        // For simplicity, just print a message here
-                        println("New username cannot be empty.")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "Save Username")
-            }
-        }
-    }
-}
-
-// You can define your function to update the username in Firebase here
-
-
-@Composable
-fun EditUsernameScreen(navController: NavHostController) {
-    var newUsername by remember { mutableStateOf("") }
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TextField(
-                value = newUsername,
-                onValueChange = { newUsername = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .padding(horizontal = 16.dp)
-                    .clip(shape = MaterialTheme.shapes.medium)
-                    .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium),
-                label = { Text("Update Username") },
-                visualTransformation = VisualTransformation.None,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text
-                ),
-                singleLine = false
-            )
-
-            Button(
-                onClick = {
-                    // Handle button click to save new username
-                    if (newUsername.isNotEmpty()) {
-                        // Call your function to update the username in Firebase
-                        updateUsername(newUsername, auth, firestore, navController)
-                    } else {
-                        // Handle case where the new username is empty
-                        // You can show a toast or error message
-                        // For simplicity, just print a message here
-                        println("New username cannot be empty.")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "Save Username")
-            }
-        }
-    }
-}
-
-fun updateUsername(newUsername: String, auth: FirebaseAuth, firestore: FirebaseFirestore, navController: NavHostController) {
-    // Pastikan pengguna sudah login
-    val currentUser = auth.currentUser
-    if (currentUser != null) {
-        // Mendapatkan ID pengguna
-        val userId = currentUser.uid
-
-        // Mendapatkan referensi dokumen pengguna di Firestore
-        val userDocRef = firestore.collection("users").document(userId)
-
-        // Memperbarui data username di Firestore
-        userDocRef.update("username", newUsername)
-            .addOnSuccessListener {
-                // Update username berhasil
-                println("Username berhasil diubah menjadi $newUsername")
-                // Navigate back to the profile screen
-                navController.popBackStack()
-            }
-            .addOnFailureListener { e ->
-                // Gagal mengupdate username
-                println("Gagal mengubah username: $e")
-            }
-    } else {
-        // Pengguna belum login
-        println("Pengguna belum login.")
     }
 }

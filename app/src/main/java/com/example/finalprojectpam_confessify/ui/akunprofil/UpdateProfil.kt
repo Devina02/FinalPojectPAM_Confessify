@@ -1,5 +1,6 @@
-package com.example.finalprojectpam_confessify.ui.Create
+package com.example.finalprojectpam_confessify.ui.akunprofil
 
+import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -17,11 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,11 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -43,28 +38,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.R
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CreateScreen(navController: NavHostController) {
+fun UpdateProfile(navController: NavHostController) {
+    var updateProfile by remember { mutableStateOf("") }
 
-    var confessText by remember { mutableStateOf("") }
     val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -94,7 +88,7 @@ fun CreateScreen(navController: NavHostController) {
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Buat Confess Mu",
+                        text = "Edit Username",
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 22.sp,
@@ -108,15 +102,15 @@ fun CreateScreen(navController: NavHostController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
                     TextField(
-                        value = confessText,
-                        onValueChange = { confessText = it },
+                        value = updateProfile,
+                        onValueChange = { updateProfile = it },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
+                            .height(50.dp)
                             .padding(horizontal = 16.dp)
                             .clip(shape = MaterialTheme.shapes.medium)
                             .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium),
-                        label = { Text("Confess Text") },
+                        label = { Text("Masukan Username baru") },
                         visualTransformation = VisualTransformation.None,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Text
@@ -124,33 +118,17 @@ fun CreateScreen(navController: NavHostController) {
                         singleLine = false
                     )
                     Button(
-                        onClick = {
-                            val firestore = Firebase.firestore
-                            val confessData = hashMapOf(
-                                "confessText" to confessText,
-                            )
-                            firestore.collection("confessions")
-                                .add(confessData)
-                                .addOnSuccessListener { documentReference ->
-                                    println("DocumentSnapshot added with ID: ${documentReference.id}")
-
-                                    // Show success toast
-                                    Toast.makeText(context, "Berhasil Upload Confess, Silahkan ke page Home", Toast.LENGTH_SHORT).show()
-                                }
-                                .addOnFailureListener { e ->
-                                    println("Error adding document: $e")
-                                }
-                        },
+                        onClick = { updateUsername(updateProfile, context) },
                         modifier = Modifier.fillMaxWidth().padding(8.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Send,
+                            imageVector = Icons.Filled.Done,
                             contentDescription = "",
                             tint = Color.White,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Upload")
+                        Text(text = "Save")
                     }
                 }
             }
@@ -163,50 +141,46 @@ fun CreateScreen(navController: NavHostController) {
         ) {
             Button(
                 onClick = {
-                    navController.navigate("Create")
+                    navController.navigate("AkunProfil")
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Create"
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
                 )
                 Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Create")
-            }
-
-            Button(
-                onClick = {
-                    navController.navigate("Home")
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = "Home"
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Home")
-            }
-
-            Button(
-                onClick = { navController.navigate("AkunProfil") }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Face,
-                    contentDescription = "Profile"
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Profile")
+                Text(text = "Back")
             }
         }
     }
 }
 
+fun updateUsername(newUsername: String, context: Context) {
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
+
+    val profileUpdates = UserProfileChangeRequest.Builder()
+        .setDisplayName(newUsername)
+        .build()
+
+    user?.updateProfile(profileUpdates)
+        ?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "Berhasil Upload Username, Silahkan klik back ", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Gagal mengupdate username", Toast.LENGTH_SHORT).show()
+            }
+        }
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
-fun CreateScreenPreview() {
+fun UpdateProfilePreview() {
     val navController = rememberNavController()
     MaterialTheme {
-        CreateScreen(navController = navController)
+        UpdateProfile(navController = navController)
     }
 }
+
+

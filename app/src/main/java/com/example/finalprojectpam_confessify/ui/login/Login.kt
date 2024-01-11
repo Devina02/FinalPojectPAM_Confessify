@@ -108,7 +108,6 @@ fun LoginScreen(
                         )
                     }
                 )
-
                 Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(

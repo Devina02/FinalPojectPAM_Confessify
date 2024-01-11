@@ -166,6 +166,7 @@ fun SignUpScreen(
                         registerUser(email, username, password, navController)
                         // ini buat nampilin notif kalo udh berhasil regis
                         showToast(context, "Registrasi berhasil!")
+                        navController.navigate("Login")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
