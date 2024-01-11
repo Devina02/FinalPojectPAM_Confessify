@@ -2,6 +2,7 @@ package com.example.finalprojectpam_confessify.ui.akunprofil
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -25,22 +27,33 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.finalprojectpam_confessify.Greeting
 import com.example.finalprojectpam_confessify.R
+import com.example.finalprojectpam_confessify.ui.theme.FinalProjectPAM_ConfessifyTheme
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun AkunProfilScreen(navController: NavHostController) {
@@ -59,7 +72,9 @@ fun AkunProfilScreen(navController: NavHostController) {
         )
 
         Column(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
         ) {
             Card(
                 modifier = Modifier
@@ -88,12 +103,17 @@ fun AkunProfilScreen(navController: NavHostController) {
                     UserProfile(user?.displayName, user?.email)
 
                     // Button "Edit Username"
-                    Button(onClick = { /*TODO*/ }, modifier = Modifier
+                    Button(
+                        onClick = {
+                            println("Navigating to EditUsername")
+                            navController.navigate("EditUsername")
+                                  },
+                        modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
-                            contentDescription = "",
+                            contentDescription = "null",
                             tint = Color.White,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
@@ -188,5 +208,140 @@ fun UserProfile(username: String?, email: String?) {
             modifier = Modifier.padding(10.dp),
             color = Color.Black
         )
+    }
+}
+
+@Composable
+fun EditUsernameScreen(navController: NavHostController) {
+    var newUsername by remember { mutableStateOf("") }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        // Your background image or content goes here
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            OutlinedTextField(
+                value = newUsername,
+                onValueChange = { value -> newUsername = value },
+                label = { Text("New Username") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    // Handle button click to save new username
+                    if (newUsername.isNotEmpty()) {
+                        // Call your function to update the username in Firebase
+                        updateUsername(newUsername)
+                        // Navigate back to the profile screen
+                        navController.popBackStack()
+                    } else {
+                        // Handle case where the new username is empty
+                        // You can show a toast or error message
+                        // For simplicity, just print a message here
+                        println("New username cannot be empty.")
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Save Username")
+            }
+        }
+    }
+}
+
+// You can define your function to update the username in Firebase here
+
+
+@Composable
+fun EditUsernameScreen(navController: NavHostController) {
+    var newUsername by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextField(
+                value = newUsername,
+                onValueChange = { newUsername = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .padding(horizontal = 16.dp)
+                    .clip(shape = MaterialTheme.shapes.medium)
+                    .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium),
+                label = { Text("Update Username") },
+                visualTransformation = VisualTransformation.None,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = false
+            )
+
+            Button(
+                onClick = {
+                    // Handle button click to save new username
+                    if (newUsername.isNotEmpty()) {
+                        // Call your function to update the username in Firebase
+                        updateUsername(newUsername, auth, firestore, navController)
+                    } else {
+                        // Handle case where the new username is empty
+                        // You can show a toast or error message
+                        // For simplicity, just print a message here
+                        println("New username cannot be empty.")
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Save Username")
+            }
+        }
+    }
+}
+
+fun updateUsername(newUsername: String, auth: FirebaseAuth, firestore: FirebaseFirestore, navController: NavHostController) {
+    // Pastikan pengguna sudah login
+    val currentUser = auth.currentUser
+    if (currentUser != null) {
+        // Mendapatkan ID pengguna
+        val userId = currentUser.uid
+
+        // Mendapatkan referensi dokumen pengguna di Firestore
+        val userDocRef = firestore.collection("users").document(userId)
+
+        // Memperbarui data username di Firestore
+        userDocRef.update("username", newUsername)
+            .addOnSuccessListener {
+                // Update username berhasil
+                println("Username berhasil diubah menjadi $newUsername")
+                // Navigate back to the profile screen
+                navController.popBackStack()
+            }
+            .addOnFailureListener { e ->
+                // Gagal mengupdate username
+                println("Gagal mengubah username: $e")
+            }
+    } else {
+        // Pengguna belum login
+        println("Pengguna belum login.")
     }
 }

@@ -8,6 +8,7 @@ import com.example.finalprojectpam_confessify.SplashScreen
 import com.example.finalprojectpam_confessify.ui.Create.CreateScreen
 import com.example.finalprojectpam_confessify.ui.Home.HomeScreen
 import com.example.finalprojectpam_confessify.ui.akunprofil.AkunProfilScreen
+import com.example.finalprojectpam_confessify.ui.akunprofil.EditUsernameScreen
 import com.example.finalprojectpam_confessify.ui.login.LoginScreen
 import com.example.finalprojectpam_confessify.ui.signup.SignUpScreen
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +35,10 @@ fun Nav(navController: NavHostController, firestore: FirebaseFirestore) {
         }
         composable("Create"){
             CreateScreen(navController)
+        }
+
+        composable("EditUsername"){
+            EditUsernameScreen(newUsername = String())
         }
 
     }
