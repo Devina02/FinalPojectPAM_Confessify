@@ -10,10 +10,11 @@ import com.example.finalprojectpam_confessify.ui.Home.HomeScreen
 import com.example.finalprojectpam_confessify.ui.akunprofil.AkunProfilScreen
 import com.example.finalprojectpam_confessify.ui.login.LoginScreen
 import com.example.finalprojectpam_confessify.ui.signup.SignUpScreen
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
-fun Nav(navController: NavHostController) {
+fun Nav(navController: NavHostController, firestore: FirebaseFirestore) {
 
     NavHost(navController = navController, startDestination = "SplashScreen" ){
         composable("SplashScreen"){
@@ -26,7 +27,7 @@ fun Nav(navController: NavHostController) {
             LoginScreen(navController)
         }
         composable("Home"){
-            HomeScreen(navController)
+            HomeScreen(navController, firestore = firestore)
         }
         composable("AkunProfil"){
             AkunProfilScreen(navController)

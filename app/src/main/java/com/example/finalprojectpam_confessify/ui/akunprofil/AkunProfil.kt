@@ -40,16 +40,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun AkunProfilScreen(navController: NavHostController) {
-    val username = navController.previousBackStackEntry?.arguments?.getString("username") ?: ""
-    val email = navController.previousBackStackEntry?.arguments?.getString("email") ?: ""
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
 
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter // Mengubah contentAlignment ke TopCenter
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
         Image(
             painter = painterResource(id = R.drawable.img),
@@ -57,10 +57,9 @@ fun AkunProfilScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
+            modifier = Modifier.fillMaxWidth().align(Alignment.Center)
         ) {
             Card(
                 modifier = Modifier
@@ -82,21 +81,11 @@ fun AkunProfilScreen(navController: NavHostController) {
                             .height(200.dp)
                             .clip(shape = CircleShape)
                     )
+
                     Spacer(modifier = Modifier.height(40.dp))
-                    Text(
-                        text = "Username  : $username",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(10.dp),
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Email  : $email",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(10.dp),
-                        color = Color.Black
-                    )
+
+                    // Displaying user data
+                    UserProfile(user?.displayName, user?.email)
 
                     // Button "Edit Username"
                     Button(onClick = { /*TODO*/ }, modifier = Modifier
@@ -113,7 +102,10 @@ fun AkunProfilScreen(navController: NavHostController) {
                     }
 
                     // Button "LogOut Akun"
-                    Button(onClick = { navController.navigate("Login")}, modifier = Modifier
+                    Button(onClick = {
+                        auth.signOut()
+                        navController.navigate("Login")
+                    }, modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
                         Icon(
@@ -128,6 +120,7 @@ fun AkunProfilScreen(navController: NavHostController) {
                 }
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,11 +169,24 @@ fun AkunProfilScreen(navController: NavHostController) {
         }
     }
 }
-
-
 @Composable
-@Preview
-fun AkunProfilPreview() {
-    val navController = rememberNavController()
-    AkunProfilScreen(navController = navController)
+fun UserProfile(username: String?, email: String?) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "Username  : ${username ?: "N/A"}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(10.dp),
+            color = Color.Black
+        )
+        Text(
+            text = "Email  : ${email ?: "N/A"}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(10.dp),
+            color = Color.Black
+        )
+    }
 }

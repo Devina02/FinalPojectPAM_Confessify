@@ -10,19 +10,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.navigation.Nav
 import com.example.finalprojectpam_confessify.ui.theme.FinalProjectPAM_ConfessifyTheme
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
+    private val firestore: FirebaseFirestore by lazy {
+        FirebaseFirestore.getInstance()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             FinalProjectPAM_ConfessifyTheme {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
-                Nav(navController)
+                Nav(navController, firestore = firestore)
             }
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

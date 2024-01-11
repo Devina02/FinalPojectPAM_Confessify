@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
@@ -59,7 +58,7 @@ fun CreateScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter // Mengubah contentAlignment ke TopCenter
+        contentAlignment = Alignment.TopCenter
     ) {
         Image(
             painter = painterResource(id = R.drawable.img),
@@ -91,7 +90,7 @@ fun CreateScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(38.dp)
-                            .padding(horizontal = 16.dp) // Menambahkan padding di kanan dan kiri
+                            .padding(horizontal = 16.dp)
                             .clip(shape = MaterialTheme.shapes.medium)
                             .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium),
                         label = {
@@ -111,9 +110,9 @@ fun CreateScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(150.dp)
-                            .padding(horizontal = 16.dp) // Menambahkan padding di kanan dan kiri
-                            .clip(shape = MaterialTheme.shapes.medium) // Menggunakan shape silinder
-                            .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium), // Menambahkan border
+                            .padding(horizontal = 16.dp)
+                            .clip(shape = MaterialTheme.shapes.medium)
+                            .border(1.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.medium),
                         label = { Text("Confess Text") },
                         visualTransformation = VisualTransformation.None,
                         keyboardOptions = KeyboardOptions.Default.copy(
@@ -121,22 +120,12 @@ fun CreateScreen(navController: NavHostController) {
                         ),
                         singleLine = false
                     )
-
-
-
-                    // Button "Edit Username"
                     Button(
                         onClick = {
-                            // Get an instance of Firestore
                             val firestore = Firebase.firestore
-
-                            // Create a data object to be saved
                             val confessData = hashMapOf(
                                 "confessText" to confessText,
-                                // You can add more fields if needed
                             )
-
-                            // Add a new document with a generated ID
                             firestore.collection("confessions")
                                 .add(confessData)
                                 .addOnSuccessListener { documentReference ->
@@ -168,7 +157,6 @@ fun CreateScreen(navController: NavHostController) {
         ) {
             Button(
                 onClick = {
-                    // Handle button click for "Create"
                     println("Navigating to Create")
                     navController.navigate("Create")
                 }
@@ -183,7 +171,6 @@ fun CreateScreen(navController: NavHostController) {
 
             Button(
                 onClick = {
-                    // Handle button click for "Home"
                     navController.navigate("Home")
                 }
             ) {
