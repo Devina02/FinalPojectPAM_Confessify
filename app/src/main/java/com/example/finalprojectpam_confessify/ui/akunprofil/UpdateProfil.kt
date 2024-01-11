@@ -52,28 +52,36 @@ import com.example.finalprojectpam_confessify.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 
+// Layar ini urusannya buat update profil pengguna.
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateProfile(navController: NavHostController) {
+    // State ini buat simpan nilai dari TextField.
     var updateProfile by remember { mutableStateOf("") }
 
+    // Dapetin konteks lokal.
     val context = LocalContext.current
 
+    // Tampilan utama pake Box sebagai tempatnya.
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
+        // Gambar latar pake Image dengan ContentScale Crop.
         Image(
             painter = painterResource(id = R.drawable.img),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
+        // Column utama isinya komponen-komponen lain.
         Column(
             modifier = Modifier
                 .fillMaxWidth().align(Alignment.Center)
         ) {
+            // Card buat ngegabungin elemen-elemen tampilan.
             Card(
                 modifier = Modifier
                     .padding(16.dp)
@@ -83,9 +91,11 @@ fun UpdateProfile(navController: NavHostController) {
                     containerColor = Color.White
                 )
             ) {
+                // Column di dalam Card buat tata letak vertikal.
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Spacer buat ngasi jarak.
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = "Edit Username",
@@ -100,6 +110,7 @@ fun UpdateProfile(navController: NavHostController) {
                         textAlign = TextAlign.Center
                     )
 
+                    // Spacer lagi buat ngasi jarak.
                     Spacer(modifier = Modifier.height(16.dp))
                     TextField(
                         value = updateProfile,
@@ -133,6 +144,8 @@ fun UpdateProfile(navController: NavHostController) {
                 }
             }
         }
+
+        // Row buat tombol navigasi back.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,6 +168,7 @@ fun UpdateProfile(navController: NavHostController) {
     }
 }
 
+// Fungsi buat update username di Firebase.
 fun updateUsername(newUsername: String, context: Context) {
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
@@ -182,5 +196,3 @@ fun UpdateProfilePreview() {
         UpdateProfile(navController = navController)
     }
 }
-
-

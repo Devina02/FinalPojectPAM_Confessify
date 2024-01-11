@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -54,7 +55,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finalprojectpam_confessify.R
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 
 
@@ -63,23 +63,30 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun CreateScreen(navController: NavHostController) {
 
+    // MutableState untuk menyimpan nilai dari TextField.
     var confessText by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    // Tampilan utama menggunakan Box sebagai kontainer paling luar.
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
+        // Gambar latar belakang menggunakan Image dengan ContentScale Crop.
         Image(
             painter = painterResource(id = R.drawable.img),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
+        // Column utama yang mengandung komponen-komponen lainnya.
         Column(
             modifier = Modifier
                 .fillMaxWidth().align(Alignment.Center)
         ) {
+            // Card untuk mengelompokkan elemen-elemen tampilan.
             Card(
                 modifier = Modifier
                     .padding(16.dp)
@@ -89,9 +96,11 @@ fun CreateScreen(navController: NavHostController) {
                     containerColor = Color.White
                 )
             ) {
+                // Column di dalam Card untuk tata letak vertikal.
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Spacer untuk memberikan jarak.
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = "Buat Confess Mu",
@@ -106,7 +115,10 @@ fun CreateScreen(navController: NavHostController) {
                         textAlign = TextAlign.Center
                     )
 
+                    // Spacer lagi untuk memberikan jarak.
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    // TextField untuk memasukkan teks confess.
                     TextField(
                         value = confessText,
                         onValueChange = { confessText = it },
@@ -123,6 +135,8 @@ fun CreateScreen(navController: NavHostController) {
                         ),
                         singleLine = false
                     )
+
+                    // Tombol untuk mengunggah teks confess ke Firebase Firestore.
                     Button(
                         onClick = {
                             val firestore = Firebase.firestore
@@ -134,7 +148,7 @@ fun CreateScreen(navController: NavHostController) {
                                 .addOnSuccessListener { documentReference ->
                                     println("DocumentSnapshot added with ID: ${documentReference.id}")
 
-                                    // Show success toast
+                                    // Menampilkan toast keberhasilan.
                                     Toast.makeText(context, "Berhasil Upload Confess, Silahkan ke page Home", Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener { e ->
@@ -155,12 +169,15 @@ fun CreateScreen(navController: NavHostController) {
                 }
             }
         }
+
+        // Row untuk menampilkan tombol navigasi.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
+            // Tombol Create
             Button(
                 onClick = {
                     navController.navigate("Create")
@@ -174,6 +191,7 @@ fun CreateScreen(navController: NavHostController) {
                 Text(text = "Create")
             }
 
+            // Tombol Home
             Button(
                 onClick = {
                     navController.navigate("Home")
@@ -187,6 +205,7 @@ fun CreateScreen(navController: NavHostController) {
                 Text(text = "Home")
             }
 
+            // Tombol Profile
             Button(
                 onClick = { navController.navigate("AkunProfil") }
             ) {

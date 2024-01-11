@@ -51,6 +51,7 @@ fun SplashScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Logo aplikasi
             Image(
                 painter = painterResource(id = R.drawable.logoo),
                 contentDescription = null,
@@ -74,5 +75,4 @@ fun SplashScreen(
             )
         }
     }
-
 }

@@ -45,15 +45,12 @@ import com.example.finalprojectpam_confessify.ui.signup.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun LoginScreen(
     navController: NavHostController
-
 ) {
-    // buat nyimpen email dan password yang diinput oleh pengguna
+    // MutableState untuk menyimpan email dan password yang diinput oleh pengguna
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -93,6 +90,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
+                // Input field untuk email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -110,6 +108,7 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Input field untuk password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -130,15 +129,16 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(30.dp))
 
+                // Tombol untuk login
                 Button(
                     onClick = {
-                        // buat manggil fungsi login
+                        // Memanggil fungsi login
                         loginUser(email, password, navController, context)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                ){
+                ) {
                     Text("Login", fontSize = 18.sp)
                 }
 
@@ -152,12 +152,13 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                TextButton(onClick = { navController.navigate("SignUp")}){
+                // Tombol untuk navigasi ke halaman SignUp
+                TextButton(onClick = { navController.navigate("SignUp") }) {
                     Text(
                         text = "SignUp",
                         fontSize = 18.sp,
                         color = Color.Black
-                        )
+                    )
                 }
             }
         }
@@ -165,7 +166,7 @@ fun LoginScreen(
 }
 
 // Fungsi untuk melakukan login pengguna
-private fun loginUser(email: String, password: String, navController: NavHostController,context: Context) {
+private fun loginUser(email: String, password: String, navController: NavHostController, context: Context) {
     // Mendapatkan instance Firebase Authentication
     val auth = FirebaseAuth.getInstance()
 
@@ -173,12 +174,14 @@ private fun loginUser(email: String, password: String, navController: NavHostCon
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // Menampilkan pesan toast untuk memberitahu bahwa login berhasil
                 showToast(context, "Login berhasil!")
                 // Navigasi ke layar "Home"
                 navController.navigate("Home")
             } else {
+                // Mendapatkan pesan error dari Firebase (jika ada)
                 val exception = task.exception as? FirebaseAuthException
-                // ini buat nampilin pesan kalo login gagal
+                // Menampilkan pesan toast untuk memberitahu bahwa login gagal beserta pesan errornya
                 showToast(context, "Login gagal. ${exception?.message}")
             }
         }

@@ -55,15 +55,20 @@ import com.example.finalprojectpam_confessify.ui.theme.FinalProjectPAM_Confessif
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+// Layar ini bertanggung jawab untuk menampilkan profil pengguna.
 @Composable
 fun AkunProfilScreen(navController: NavHostController) {
+    // Mengambil instance Firebase Auth untuk mengelola otentikasi pengguna.
     val auth = FirebaseAuth.getInstance()
+    // Mendapatkan pengguna yang saat ini masuk.
     val user = auth.currentUser
 
+    // Tampilan utama menggunakan Box sebagai kontainer paling luar.
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
+        // Gambar latar belakang menggunakan Image dengan ContentScale Crop.
         Image(
             painter = painterResource(id = R.drawable.img),
             contentDescription = null,
@@ -71,11 +76,13 @@ fun AkunProfilScreen(navController: NavHostController) {
             contentScale = ContentScale.Crop
         )
 
+        // Column utama yang mengandung komponen-komponen lainnya.
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) {
+            // Card untuk mengelompokkan elemen-elemen tampilan.
             Card(
                 modifier = Modifier
                     .padding(16.dp)
@@ -85,35 +92,39 @@ fun AkunProfilScreen(navController: NavHostController) {
                     containerColor = Color.White
                 )
             ) {
+                // Column di dalam Card untuk tata letak vertikal.
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Gambar profil pengguna dengan bentuk lingkaran.
                     Image(
                         painter = painterResource(id = R.drawable.profil),
-                        contentDescription = "null",
+                        contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(shape = CircleShape)
                     )
 
+                    // Spacer untuk memberikan ruang antara elemen-elemen.
                     Spacer(modifier = Modifier.height(40.dp))
 
-                    // Displaying user data
+                    // Menampilkan data pengguna menggunakan komponen UserProfile.
                     UserProfile(user?.displayName, user?.email)
 
-                    // Button "Edit Username"
+                    // Tombol "Edit Username" untuk navigasi ke layar EditProfil.
                     Button(
                         onClick = {
                             println("Navigating to EditUsername")
                             navController.navigate("UpdateProfil")
-                                  },
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)) {
+                            .padding(8.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
-                            contentDescription = "null",
+                            contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
@@ -121,7 +132,7 @@ fun AkunProfilScreen(navController: NavHostController) {
                         Text(text = "Edit Username")
                     }
 
-                    // Button "LogOut Akun"
+                    // Tombol "LogOut Akun" untuk keluar dari akun pengguna.
                     Button(onClick = {
                         auth.signOut()
                         navController.navigate("Login")
@@ -141,15 +152,16 @@ fun AkunProfilScreen(navController: NavHostController) {
             }
         }
 
+        // Row di bagian bawah untuk menampilkan tombol navigasi ke layar lain.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
+            // Tombol "Create" untuk navigasi ke layar Create.
             Button(
                 onClick = {
-                    // Handle button click for "Create"
                     println("Navigating to Create")
                     navController.navigate("Create")
                 }
@@ -162,9 +174,9 @@ fun AkunProfilScreen(navController: NavHostController) {
                 Text(text = "Create")
             }
 
+            // Tombol "Home" untuk navigasi ke layar Home.
             Button(
                 onClick = {
-                    // Handle button click for "Home"
                     navController.navigate("Home")
                 }
             ) {
@@ -176,8 +188,9 @@ fun AkunProfilScreen(navController: NavHostController) {
                 Text(text = "Home")
             }
 
+            // Tombol "Profile" untuk kembali ke layar AkunProfil.
             Button(
-                onClick = { navController.navigate("AkunProfil")}
+                onClick = { navController.navigate("AkunProfil") }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Face,
@@ -189,11 +202,15 @@ fun AkunProfilScreen(navController: NavHostController) {
         }
     }
 }
+
+// Komponen untuk menampilkan informasi pengguna.
 @Composable
 fun UserProfile(username: String?, email: String?) {
+    // Column untuk tata letak vertikal elemen-elemen UserProfile.
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
+        // Menampilkan nama pengguna dengan format tertentu.
         Text(
             text = "Username  : ${username ?: "N/A"}",
             fontWeight = FontWeight.Bold,
@@ -201,6 +218,7 @@ fun UserProfile(username: String?, email: String?) {
             modifier = Modifier.padding(10.dp),
             color = Color.Black
         )
+        // Menampilkan alamat email pengguna dengan format tertentu.
         Text(
             text = "Email  : ${email ?: "N/A"}",
             fontWeight = FontWeight.Bold,
